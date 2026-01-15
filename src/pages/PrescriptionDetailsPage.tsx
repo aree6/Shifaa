@@ -200,137 +200,68 @@ export default function PrescriptionDetailsPage() {
 
       <div className="-mt-2 mb-6 text-sm font-semibold text-slate-500">{p.id}</div>
 
-      <div className="grid gap-6 xl:grid-cols-3">
-        <div className="space-y-6 xl:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Patient Information</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div>
-                  <div className="text-xs font-semibold text-slate-500">Patient Name</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">
-                    {p.patient.name}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-500">Patient ID</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">
-                    {p.patient.nationalId}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-500">Age</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">
-                    {p.patient.age} years
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-500">Contact</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">
-                    {p.patient.phone}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-500">Created</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-900">
-                    {formatDateTime(p.createdAt)}
-                  </div>
-                </div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Patient Information</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-3">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <div className="text-xs font-semibold text-slate-500">Patient Name</div>
+                <div className="mt-1 text-sm font-semibold text-slate-900">{p.patient.name}</div>
               </div>
-
-              {user?.role === 'patient' ? (
-                <div className="mt-4">
-                  <Button size="sm" variant="secondary" onClick={sendDefaultOtp}>
-                    Request OTP
-                  </Button>
-                </div>
-              ) : null}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Prescribed Medications</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <div className="space-y-3">
-                {p.medications.map((m) => (
-                  <div
-                    key={m.id}
-                    className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="text-sm font-extrabold text-slate-900">{m.name}</div>
-                      <Badge variant={availabilityVariant(m.availability)}>{m.availability}</Badge>
-                    </div>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                      <div>
-                        <div className="text-xs font-semibold text-slate-500">Dosage</div>
-                        <div className="mt-1 text-sm font-semibold text-slate-900">{m.dosage}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-500">Frequency</div>
-                        <div className="mt-1 text-sm font-semibold text-slate-900">{m.frequency}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold text-slate-500">Duration</div>
-                        <div className="mt-1 text-sm font-semibold text-slate-900">{m.duration}</div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          toast.message('Generic Name', {
-                            description: `${m.name} → Generic: ${m.genericName}`,
-                          })
-                        }}
-                      >
-                        View Generic
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => openSubstitutions(m)}
-                        disabled={m.substitutions.length === 0}
-                      >
-                        {m.substitutions.length > 0 ? `Alternatives (${m.substitutions.slice(0, 2).join(', ')}${m.substitutions.length > 2 ? '…' : ''})` : 'Alternatives'}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <div className="text-xs font-semibold text-slate-500">Patient ID</div>
+                <div className="mt-1 text-sm font-semibold text-slate-900">{p.patient.nationalId}</div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Status</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <div className="mb-4">
-                <Stepper
-                  steps={[
-                    { key: 'Pending', label: 'Created' },
-                    { key: 'Verified', label: 'Verified' },
-                    { key: 'Completed', label: 'Completed' },
-                  ]}
-                  activeIndex={statusToStepIndex(p.status)}
-                />
+              <div>
+                <div className="text-xs font-semibold text-slate-500">Age</div>
+                <div className="mt-1 text-sm font-semibold text-slate-900">{p.patient.age} years</div>
               </div>
+              <div>
+                <div className="text-xs font-semibold text-slate-500">Contact</div>
+                <div className="mt-1 text-sm font-semibold text-slate-900">{p.patient.phone}</div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold text-slate-500">Created</div>
+                <div className="mt-1 text-sm font-semibold text-slate-900">{formatDateTime(p.createdAt)}</div>
+              </div>
+            </div>
 
+            {user?.role === 'patient' ? (
+              <div className="mt-4">
+                <Button size="sm" variant="secondary" onClick={sendDefaultOtp}>
+                  Request OTP
+                </Button>
+              </div>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Status & Timeline</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-3">
+            <div className="mb-4">
+              <Stepper
+                steps={[
+                  { key: 'Pending', label: 'Created' },
+                  { key: 'Verified', label: 'Verified' },
+                  { key: 'Completed', label: 'Completed' },
+                ]}
+                activeIndex={statusToStepIndex(p.status)}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Badge variant={statusVariant(p.status)}>{p.status}</Badge>
                 <div className="text-xs font-semibold text-slate-500">Ready for pickup</div>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 {canVerify && p.status === 'Pending' ? (
                   <Button size="sm" onClick={() => updateStatus('Verified', 'Verified by Pharmacist')}>
                     Verify
@@ -338,45 +269,89 @@ export default function PrescriptionDetailsPage() {
                 ) : null}
 
                 {canComplete && p.status !== 'Completed' ? (
-                  <Button
-                    size="sm"
-                    onClick={() => updateStatus('Completed', 'Marked Completed')}
-                  >
+                  <Button size="sm" onClick={() => updateStatus('Completed', 'Marked Completed')}>
                     Complete
                   </Button>
                 ) : null}
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Timeline</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <div className="space-y-3">
-                {p.timeline.map((t) => (
-                  <div key={t.id} className="rounded-xl bg-slate-50 px-4 py-3">
-                    <div className="text-sm font-semibold text-slate-900">{t.label}</div>
-                    <div className="mt-1 text-xs font-semibold text-slate-500">
-                      {formatDateTime(t.at)}
+            <div className="mt-5 space-y-3">
+              {p.timeline.map((t) => (
+                <div key={t.id} className="rounded-xl bg-slate-50 px-4 py-3">
+                  <div className="text-sm font-semibold text-slate-900">{t.label}</div>
+                  <div className="mt-1 text-xs font-semibold text-slate-500">{formatDateTime(t.at)}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-6">
+        <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>Prescribed Medications</CardTitle>
+              <div className="mt-1 text-xs font-semibold text-slate-500">
+                Prescribed by {p.doctor.name} · {p.doctor.title}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-3">
+            <div className="space-y-3">
+              {p.medications.map((m) => (
+                <div
+                  key={m.id}
+                  className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="text-sm font-extrabold text-slate-900">{m.name}</div>
+                    <Badge variant={availabilityVariant(m.availability)}>{m.availability}</Badge>
+                  </div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    <div>
+                      <div className="text-xs font-semibold text-slate-500">Dosage</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-900">{m.dosage}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-slate-500">Frequency</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-900">{m.frequency}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-slate-500">Duration</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-900">{m.duration}</div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Prescribing Doctor</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <div className="text-sm font-extrabold text-slate-900">{p.doctor.name}</div>
-              <div className="mt-1 text-sm font-semibold text-slate-500">{p.doctor.title}</div>
-            </CardContent>
-          </Card>
-        </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        toast.message('Generic Name', {
+                          description: `${m.name} → Generic: ${m.genericName}`,
+                        })
+                      }}
+                    >
+                      View Generic
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => openSubstitutions(m)}
+                      disabled={m.substitutions.length === 0}
+                    >
+                      {m.substitutions.length > 0
+                        ? `Alternatives (${m.substitutions.slice(0, 2).join(', ')}${m.substitutions.length > 2 ? '…' : ''})`
+                        : 'Alternatives'}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Modal
