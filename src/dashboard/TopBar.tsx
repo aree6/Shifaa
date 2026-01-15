@@ -1,11 +1,15 @@
-import { Bell } from 'lucide-react'
+import { Bell, Menu } from 'lucide-react'
 import { useMemo } from 'react'
 import { toast } from 'sonner'
 import { useAuth } from '../auth/auth-context'
 import { listShortages } from '../lib/storage'
 import { useDataChanged } from '../lib/useDataChanged'
 
-export default function TopBar() {
+export default function TopBar({
+  onOpenNav,
+}: {
+  onOpenNav?: () => void
+}) {
   const { user } = useAuth()
 
   const dataVersion = useDataChanged()
@@ -20,7 +24,17 @@ export default function TopBar() {
 
   return (
     <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-      <div className="text-sm font-semibold text-slate-700">{user?.role.toUpperCase()} Portal</div>
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          className="-ml-2 rounded-xl p-2 text-slate-600 transition hover:bg-slate-100 md:hidden"
+          aria-label="Open navigation"
+          onClick={() => onOpenNav?.()}
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <div className="text-sm font-semibold text-slate-700">{user?.role.toUpperCase()} Portal</div>
+      </div>
 
       <button
         className="relative rounded-full p-2 text-slate-600 transition hover:bg-slate-100"

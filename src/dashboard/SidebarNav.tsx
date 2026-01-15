@@ -52,11 +52,15 @@ const NAV: NavItem[] = [
   },
 ]
 
-export default function SidebarNav() {
+export default function SidebarNav({
+  onNavigate,
+}: {
+  onNavigate?: () => void
+}) {
   const { user, logout } = useAuth()
 
   return (
-    <aside className="w-72 shrink-0 bg-shiffa-800 text-white">
+    <aside className="fixed left-0 top-0 flex h-screen w-72 shrink-0 flex-col bg-shiffa-800 text-white">
       <div className="px-6 py-6">
         <div className="text-3xl font-extrabold">Shifaa'</div>
         <div className="mt-1 text-sm font-medium text-white/70">Healthcare System</div>
@@ -79,6 +83,7 @@ export default function SidebarNav() {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={() => onNavigate?.()}
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white',
@@ -95,7 +100,10 @@ export default function SidebarNav() {
 
       <div className="mt-auto px-4 pb-6 pt-6">
         <button
-          onClick={logout}
+          onClick={() => {
+            logout()
+            onNavigate?.()
+          }}
           className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           <LogOut className="h-4 w-4" />

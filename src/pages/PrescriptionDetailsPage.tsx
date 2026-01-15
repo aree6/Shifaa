@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/Card'
 import Modal from '../components/Modal'
 import Input from '../components/Input'
 import PageHeader from '../components/PageHeader'
+import Stepper from '../components/Stepper'
 import { useAuth } from '../auth/auth-context'
 import { downloadPdfText } from '../lib/download'
 import { useDataChanged } from '../lib/useDataChanged'
@@ -29,6 +30,12 @@ function availabilityVariant(a: Medication['availability']) {
   if (a === 'Available') return 'green'
   if (a === 'Low') return 'yellow'
   return 'red'
+}
+
+function statusToStepIndex(status: PrescriptionStatus) {
+  if (status === 'Completed') return 2
+  if (status === 'Verified') return 1
+  return 0
 }
 
 export default function PrescriptionDetailsPage() {
@@ -307,13 +314,24 @@ export default function PrescriptionDetailsPage() {
               <CardTitle>Status</CardTitle>
             </CardHeader>
             <CardContent className="pt-3">
+              <div className="mb-4">
+                <Stepper
+                  steps={[
+                    { key: 'Pending', label: 'Created' },
+                    { key: 'Verified', label: 'Verified' },
+                    { key: 'Completed', label: 'Completed' },
+                  ]}
+                  activeIndex={statusToStepIndex(p.status)}
+                />
+              </div>
+
               <div className="flex items-center gap-3">
                 <Badge variant={statusVariant(p.status)}>{p.status}</Badge>
                 <div className="text-xs font-semibold text-slate-500">Ready for pickup</div>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-{canVerify && p.status === 'Pending' ? (
+                {canVerify && p.status === 'Pending' ? (
                   <Button size="sm" onClick={() => updateStatus('Verified', 'Verified by Pharmacist')}>
                     Verify
                   </Button>

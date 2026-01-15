@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/Card'
 import Modal from '../components/Modal'
 import Input from '../components/Input'
 import PageHeader from '../components/PageHeader'
+import Stepper from '../components/Stepper'
 import { useAuth } from '../auth/auth-context'
 import type { Prescription, PrescriptionStatus } from '../lib/types'
 import { listPrescriptions, listShortages, upsertPrescription } from '../lib/storage'
@@ -18,6 +19,12 @@ function statusVariant(status: PrescriptionStatus) {
   if (status === 'Verified') return 'green'
   if (status === 'Pending') return 'yellow'
   return 'gray'
+}
+
+function statusToStepIndex(status: PrescriptionStatus) {
+  if (status === 'Completed') return 2
+  if (status === 'Verified') return 1
+  return 0
 }
 
 export default function PrescriptionPage() {
@@ -170,6 +177,18 @@ export default function PrescriptionPage() {
                 <Badge variant={statusVariant(p.status)}>{p.status}</Badge>
               </CardHeader>
               <CardContent className="pt-3">
+                <div className="mb-4">
+                  <Stepper
+                    size="sm"
+                    steps={[
+                      { key: 'Pending', label: 'Created' },
+                      { key: 'Verified', label: 'Verified' },
+                      { key: 'Completed', label: 'Completed' },
+                    ]}
+                    activeIndex={statusToStepIndex(p.status)}
+                  />
+                </div>
+
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div>
                     <div className="text-xs font-semibold text-slate-500">Patient ID</div>

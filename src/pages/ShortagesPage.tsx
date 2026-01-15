@@ -7,6 +7,7 @@ import Input from '../components/Input'
 import Modal from '../components/Modal'
 import PageHeader from '../components/PageHeader'
 import Select from '../components/Select'
+import Stepper from '../components/Stepper'
 import { useAuth } from '../auth/auth-context'
 import type { ShortageReport, ShortageSeverity } from '../lib/types'
 import { listShortages, upsertShortage, upsertPledge } from '../lib/storage'
@@ -17,6 +18,10 @@ function severityVariant(s: ShortageSeverity) {
   if (s === 'High') return 'red'
   if (s === 'Medium') return 'yellow'
   return 'gray'
+}
+
+function verificationToStepIndex(verified: boolean) {
+  return verified ? 1 : 0
 }
 
 export default function ShortagesPage() {
@@ -197,6 +202,17 @@ export default function ShortagesPage() {
                 </div>
               </CardHeader>
               <CardContent className="pt-3">
+                <div className="mb-4">
+                  <Stepper
+                    size="sm"
+                    steps={[
+                      { key: 'Reported', label: 'Reported' },
+                      { key: 'Verified', label: 'Verified' },
+                    ]}
+                    activeIndex={verificationToStepIndex(r.verified)}
+                  />
+                </div>
+
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div>
                     <div className="text-xs font-semibold text-slate-500">Generic</div>

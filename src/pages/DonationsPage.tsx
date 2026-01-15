@@ -7,6 +7,7 @@ import Input from '../components/Input'
 import Modal from '../components/Modal'
 import PageHeader from '../components/PageHeader'
 import Select from '../components/Select'
+import Stepper from '../components/Stepper'
 import { useAuth } from '../auth/auth-context'
 import type { DonationPledge, ShortageReport } from '../lib/types'
 import { listPledges, listShortages, upsertPledge } from '../lib/storage'
@@ -19,6 +20,12 @@ function statusVariant(status: DonationPledge['status']) {
   if (status === 'Delivered') return 'green'
   if (status === 'In Transit') return 'yellow'
   return 'gray'
+}
+
+function statusToStepIndex(status: DonationPledge['status']) {
+  if (status === 'Delivered') return 2
+  if (status === 'In Transit') return 1
+  return 0
 }
 
 export default function DonationsPage() {
@@ -171,6 +178,18 @@ export default function DonationsPage() {
                 <Badge variant={statusVariant(p.status)}>{p.status}</Badge>
               </CardHeader>
               <CardContent className="pt-3">
+                <div className="mb-4">
+                  <Stepper
+                    size="sm"
+                    steps={[
+                      { key: 'Pledged', label: 'Pledged' },
+                      { key: 'In Transit', label: 'In Transit' },
+                      { key: 'Delivered', label: 'Delivered' },
+                    ]}
+                    activeIndex={statusToStepIndex(p.status)}
+                  />
+                </div>
+
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div>
                     <div className="text-xs font-semibold text-slate-500">Donor</div>
